@@ -1,10 +1,4 @@
-/* Photocell simple testing sketch. 
- 
-Connect one end of the photocell to 5V, the other end to Analog 0.
-Then connect one end of a 10K resistor from Analog 0 to ground 
-Connect LED from pin 11 through a resistor to ground 
-For more information see http://learn.adafruit.com/photocells */
- 
+String command;
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
   Serial.begin(9600);   
@@ -24,6 +18,22 @@ void shutterStatus(int minumum) { // "minimum" parameter is minumum analog readi
   //return false;
   }
 }
-shutterStatus(600);
 
-void loop(){} //Required for Arduino
+
+void loop(){
+//  shutterStatus(600);
+//  delay(2000);  
+  if(Serial.available() > 0){
+    command = Serial.readString();
+    Serial.print("Command: ");
+    Serial.println(command);
+    switch(command){
+      case shutterStatusCase:
+        shutterStatus(150);
+        break;
+      default:
+        Serial.println("INVALID command. Please try again.");
+        break;
+    }
+  }
+}
