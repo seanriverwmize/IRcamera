@@ -17,11 +17,12 @@ For more information see http://learn.adafruit.com/photocells */
     photocellAnalogReading = analogRead(photocellPin); //analogRead converts Voltage value to an integer 0 - 1023 
     Serial.print("Analog reading = ");
     Serial.println(photocellAnalogReading);     // the raw analog reading prints to Serial
-    if (photocellAnalogReading >= minimum){
+    if (photocellAnalogReading >= minumum){
     Serial.println("Shutter is Open");
     return true;
     } else {
     Serial.println("Shutter is Closed");
     return false;
     }
+    shutterStatus(600);
 }
