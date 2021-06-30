@@ -45,6 +45,14 @@ void shutterClose(){
   }
 }
 
+void captureImage(){
+  
+}
+
+void showInternalTemp(){
+  
+}
+
 void loop(){  
   if(Serial.available() > 0){
     command = Serial.readString();
