@@ -26,6 +26,7 @@ void setup(void) {
       while (1);
   }
   pinMode(5, OUTPUT);
+  pinMode(0, OUTPUT);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
 }
@@ -35,7 +36,7 @@ void captureImageGroup(){ //Placeholder!!!!!!!!!!!!
 }
 
 bool shutterStatus(int minumum) { // "minimum" parameter is minumum analog reading when shutter is open
-  int photocellPin = 1;            // more light on photocell means higher voltage reading on analog pin 0
+  int photocellPin = A0;            // more light on photocell means higher voltage reading on analog pin 0
   int photocellAnalogReading;     // the analog reading from the voltage divider
             
   photocellAnalogReading = analogRead(photocellPin); //analogRead converts Voltage value to an integer 0 - 1023 
