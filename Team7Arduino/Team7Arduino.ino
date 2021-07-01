@@ -8,6 +8,7 @@
 int command; // Commands are read throught the Serial port as integers
 Adafruit_AMG88xx amg;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
+bool status;
 const int roomLight = 400;  // minimum analog reading from photocell when exposed to room light
 const int totalSteps = 200; // Total number of steps per rotation of shutter motor
 TemperatureZero TempZero = TemperatureZero();
