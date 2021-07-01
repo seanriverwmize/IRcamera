@@ -11,7 +11,7 @@ float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 const int roomLight = 400;  // minimum analog reading from photocell when exposed to room light
 const int totalSteps = 200; // Total number of steps per rotation of shutter motor
 TemperatureZero TempZero = TemperatureZero();
-float itsyBitsyTemperature
+float itsyBitsyTemperature;
 
 Stepper stepper(totalSteps, 12, 11, 9, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
 //Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
