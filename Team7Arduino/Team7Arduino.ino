@@ -21,10 +21,11 @@ void setup(void) {
   // Setup function needs to run once when instrument is plugged in
   Serial.begin(9600);
   status = amg.begin();
-    if (!status) {
-        Serial.println("Could not find a valid AMG88xx sensor, check wiring!");
-        while (1);
-    }
+  if (!status) {
+      Serial.println("Could not find a valid AMG88xx sensor, check wiring!");
+      while (1);
+  }
+  pinMode(5, OUTPUT);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
 }
@@ -79,9 +80,11 @@ void captureImage(){
 void showInternalTemp(){
   itsyBitsyTemperature = TempZero.readInternalTemperature();
   Serial.print("Itsy Bitsy M4 Internal Temp: ");
-  Serial.println(itsyBitsyTemperature);
+  Serial.print(itsyBitsyTemperature);
+  Serial.println(" degrees C");
   Serial.print("AMG8833 Internal Temp: ");
   Serial.println(amg.readThermistor());
+  Serial.println(" degrees C");
 }
 
 void loop(){  
