@@ -1,12 +1,17 @@
+//Include Libraries:
+//Arduino SAMD Boards; Adafruit SAMD Board; Adafruit AMG88xx; TemperatureZero
 #include <Wire.h>
 #include <Adafruit_AMG88xx.h>
 #include <Stepper.h>
+#include <TemperatureZero.h>
 
 int command; // Commands are read throught the Serial port as integers
 Adafruit_AMG88xx amg;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 const int roomLight = 400;  // minimum analog reading from photocell when exposed to room light
 const int totalSteps = 200; // Total number of steps per rotation of shutter motor
+TemperatureZero TempZero = TemperatureZero();
+float itsyBitsyTemperature
 
 Stepper stepper(totalSteps, 12, 11, 9, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
 //Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
@@ -14,8 +19,13 @@ Stepper stepper(totalSteps, 12, 11, 9, 7); // Team 7 Pins used in order: AIN1, A
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
   Serial.begin(9600);
-  Serial.println(F("AMG88xx pixels"));
-  stepper.setSpeed(60); // set the speed of the motor to 30 RPMs   
+  status = amg.begin();
+    if (!status) {
+        Serial.println("Could not find a valid AMG88xx sensor, check wiring!");
+        while (1);
+    }
+  stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
+  TempZero.init();
 }
 
 void captureImageGroup(){ //Placeholder!!!!!!!!!!!!
@@ -66,7 +76,11 @@ void captureImage(){
 }
 
 void showInternalTemp(){
-  
+  itsyBitsyTemperature = TempZero.readInternalTemperature();
+  Serial.print("Itsy Bitsy M4 Internal Temp: ");
+  Serial.println(itsyBitsyTemperature);
+  Serial.print("AMG8833 Internal Temp: ");
+  Serial.println(amg.readThermistor());
 }
 
 void loop(){  
