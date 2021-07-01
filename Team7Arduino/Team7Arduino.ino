@@ -1,8 +1,12 @@
+#include <Wire.h>
+#include <Adafruit_AMG88xx.h>
 #include <Stepper.h>
 
-const int command; // Commands are read throught the Serial port as integers
-int roomLight = 600;  // minimum analog reading from photocell when exposed to room light
-const totalSteps = 200; // Total number of steps per rotation of shutter motor
+int command; // Commands are read throught the Serial port as integers
+Adafruit_AMG88xx amg;
+float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
+const int roomLight = 400;  // minimum analog reading from photocell when exposed to room light
+const int totalSteps = 200; // Total number of steps per rotation of shutter motor
 
 Stepper stepper(totalSteps, 12, 11, 9, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
 //Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
@@ -10,6 +14,7 @@ Stepper stepper(totalSteps, 12, 11, 9, 7); // Team 7 Pins used in order: AIN1, A
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
   Serial.begin(9600);
+  Serial.println(F("AMG88xx pixels"));
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs   
 }
 
@@ -35,18 +40,29 @@ bool shutterStatus(int minumum) { // "minimum" parameter is minumum analog readi
 }
 
 void shutterOpen(int motorSteps){   // parameter = number of 1/200 rotations motor will make if shutter is closed. param should be replaced with concrete value after testing
-  if (shutterStatus() == false)   // If shutter is closed, rotate motor. Otherwise, end function.
+  if (shutterStatus(roomLight) == false)   // If shutter is closed, rotate motor. Otherwise, end function.
     stepper.step(motorSteps);   // Squiggly brackets not needed with only one statement.
 }
 
 void shutterClose(){
-  while (shutterStatus() == true){
+  while (shutterStatus(roomLight) == true){
     stepper.step(1);
   }
 }
 
 void captureImage(){
-  
+  amg.begin();
+  delay(120);
+  amg.readPixels(pixels);
+
+    Serial.print("[");
+    for(int i=1; i<=AMG88xx_PIXEL_ARRAY_SIZE; i++){
+      Serial.print(pixels[i-1]);
+      Serial.print(", ");
+      if( i%8 == 0 ) Serial.println();
+    }
+    Serial.println("]");
+    Serial.println();
 }
 
 void showInternalTemp(){
@@ -55,7 +71,7 @@ void showInternalTemp(){
 
 void loop(){  
   if(Serial.available() > 0){
-    command = Serial.readString();
+    command = Serial.parseInt();
     Serial.print("Command: ");
     Serial.println(command);
     switch(command){
