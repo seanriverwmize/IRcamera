@@ -1,6 +1,7 @@
 import serial
 import PySimpleGUI as sg
-
+import numpy
+import matplotlib.pyplot as plt
 # layout = [
 #     [sg.Text("Hey World"), sg.Text("00")],
 #     [sg.Button("RUN COMMAND"), sg.Button("RUN COMMAND"), sg.Button("RUN COMMAND"), sg.Button("RUN COMMAND"), sg.Button("RUN COMMAND")]
@@ -15,14 +16,20 @@ import PySimpleGUI as sg
 # window.close()
 
 
-port = serial.Serial(port = "COM9", baudrate = 9600, timeout = 0.1) #connect to Arduino Port
+port = serial.Serial(port = "COM5", baudrate = 9600, timeout = 4) #connect to Arduino Port
 arduino_serial_data = port.readline().decode('utf-8') # Read and Translate Serial data 
 print(arduino_serial_data)
 
 while True:
-    x = input("What would you like to send: ")
-    # x = x + "\n"
+    x = input("What would you like to send: ").encode()
     port.write(x)
-    arduino_message = port.readline('utf-8')
-    print(response)
+    arduino_message = port.read_until(expected="&".encode('utf-8')).decode('utf-8')
+    arduino_message = arduino_message[:-1]
+    if x == b'5':
+        print("Success")
+        a = numpy.random.random((16,16))
+        plt.imshow(a, cmap="hot", interpolation='nearest')
+        plt.show()
+    else:
+        print(arduino_message)
     
