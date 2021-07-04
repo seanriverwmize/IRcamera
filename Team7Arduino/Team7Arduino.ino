@@ -1,4 +1,3 @@
-
 //Include Libraries:
 //Arduino SAMD Boards; Adafruit SAMD Board; Adafruit AMG88xx; TemperatureZero
 #include <Wire.h>
@@ -69,12 +68,15 @@ void captureImage(){
   amg.begin();
   delay(120);
   amg.readPixels(pixels);
-
-    Serial.print("[");
-    for(int i=1; i<=AMG88xx_PIXEL_ARRAY_SIZE; i++){
-      Serial.print(pixels[i-1]);
-      Serial.print(", ");
-      if( i%8 == 0 ) Serial.println();
+  Serial.print("[[");
+  for(int i=1; i<=AMG88xx_PIXEL_ARRAY_SIZE; i++){
+    Serial.print(pixels[i-1]);
+    if(i == AMG88xx_PIXEL_ARRAY_SIZE){
+      Serial.print("]");
+    } else if( i%8 == 0 ){
+      Serial.println("],");
+      Serial.print("[");
+    } else Serial.print(", ");
     }
     Serial.println("]");
     Serial.println();
