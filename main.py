@@ -15,6 +15,10 @@ import matplotlib.pyplot as plt
 #         break
 # window.close()
 
+import serial
+import time
+import numpy
+import matplotlib.pyplot as plt
 
 port = serial.Serial(port = "COM5", baudrate = 9600, timeout = 4) #connect to Arduino Port
 arduino_serial_data = port.readline().decode('utf-8') # Read and Translate Serial data 
@@ -26,10 +30,13 @@ while True:
     arduino_message = port.read_until(expected="&".encode('utf-8')).decode('utf-8')
     arduino_message = arduino_message[:-1]
     if x == b'5':
-        print("Success")
-        a = numpy.random.random((16,16))
-        plt.imshow(a, cmap="hot", interpolation='nearest')
-        plt.show()
-    else:
-        print(arduino_message)
+        print(type(arduino_message))
+        #a = numpy.array(arduino_message)
+        #plt.imshow(a, cmap="hot", interpolation='nearest')
+        #plt.show()
+        
+        
+
+    print(arduino_message)
+
     
