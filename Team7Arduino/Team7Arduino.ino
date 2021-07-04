@@ -1,3 +1,4 @@
+
 //Include Libraries:
 //Arduino SAMD Boards; Adafruit SAMD Board; Adafruit AMG88xx; TemperatureZero
 #include <Wire.h>
@@ -36,8 +37,8 @@ void captureImageGroup(){ //Placeholder!!!!!!!!!!!!
 }
 
 bool shutterStatus(int minumum) { // "minimum" parameter is minumum analog reading when shutter is open
-  int photocellPin = A0;              // TEAM 7
-  //int photocellPin = 1;            // FLATSAT - more light on photocell means higher voltage reading on analog pin A0
+  // int photocellPin = A0;              // TEAM 7 photocell
+  int photocellPin = 1;            // FLATSAT photocell
   int photocellAnalogReading;     // the analog reading from the voltage divider
             
   photocellAnalogReading = analogRead(photocellPin); //analogRead converts Voltage value to an integer 0 - 1023 
@@ -85,8 +86,12 @@ void showInternalTemp(){
   Serial.print(itsyBitsyTemperature);
   Serial.println(" degrees C");
   Serial.print("AMG8833 Internal Temp: ");
-  Serial.println(amg.readThermistor());
+  Serial.print(amg.readThermistor());
   Serial.println(" degrees C");
+}
+
+void triggerEndRead(){
+  Serial.print("&");
 }
 
 void loop(){  
@@ -97,24 +102,31 @@ void loop(){
     switch(command){
       case 1:
         captureImageGroup();
+        triggerEndRead();
         break;
       case 2:
         shutterStatus(roomLight);
+        triggerEndRead();
         break;
       case 3:
         shutterOpen(30); // arbitrary argument. Replace after testing.!!!!!!!!!!!
+        triggerEndRead();
         break;
       case 4:
         shutterClose();
+        triggerEndRead();
         break;
       case 5:
         captureImage();
+        triggerEndRead();
         break;
       case 6:
         showInternalTemp();
+        triggerEndRead();
         break;
       default:
         Serial.println("INVALID command. Please try again.");
+        triggerEndRead();
         break;
     }
   }
