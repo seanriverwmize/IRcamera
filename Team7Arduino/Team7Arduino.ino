@@ -71,15 +71,18 @@ void captureImage(){
   Serial.print("[[");
   for(int i=1; i<=AMG88xx_PIXEL_ARRAY_SIZE; i++){
     Serial.print(pixels[i-1]);
-    if(i == AMG88xx_PIXEL_ARRAY_SIZE){
-      Serial.print("]");
-    } else if( i%8 == 0 ){
-      Serial.println("],");
-      Serial.print("[");
-    } else Serial.print(", ");
-    }
-    Serial.println("]");
-    Serial.println();
+    Serial.print(", ");
+  }
+//    Serial.print(pixels[i-1]);
+//    if(i == AMG88xx_PIXEL_ARRAY_SIZE){
+//      Serial.print("]");
+//    } else if( i%8 == 0 ){
+//      Serial.println("],");
+//      Serial.print("[");
+//    } else Serial.print(", ");
+//    }
+//Serial.println("]");
+//Serial.println();
 }
 
 void showInternalTemp(){
