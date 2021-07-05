@@ -68,10 +68,9 @@ void captureImage(){
   amg.begin();
   delay(120);
   amg.readPixels(pixels);
-  Serial.print("[[");
   for(int i=1; i<=AMG88xx_PIXEL_ARRAY_SIZE; i++){
     Serial.print(pixels[i-1]);
-    Serial.print(", ");
+    Serial.print(" ");
   }
 //    Serial.print(pixels[i-1]);
 //    if(i == AMG88xx_PIXEL_ARRAY_SIZE){
@@ -102,8 +101,6 @@ void triggerEndRead(){
 void loop(){  
   if(Serial.available() > 0){
     command = Serial.parseInt();
-    Serial.print("Command: ");
-    Serial.println(command);
     switch(command){
       case 1:
         captureImageGroup();
