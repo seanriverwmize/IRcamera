@@ -1,3 +1,4 @@
+
 //Include Libraries:
 //Arduino SAMD Boards; Adafruit SAMD Board; Adafruit AMG88xx; TemperatureZero
 #include <Wire.h>
@@ -29,10 +30,6 @@ void setup(void) {
   //pinMode(A0, INPUT);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
-}
-
-void captureImageGroup(){ //Placeholder!!!!!!!!!!!!
-  
 }
 
 bool shutterStatus(int minumum) { // "minimum" parameter is minumum analog reading when shutter is open
@@ -102,10 +99,6 @@ void loop(){
   if(Serial.available() > 0){
     command = Serial.parseInt();
     switch(command){
-      case 1:
-        captureImageGroup();
-        triggerEndRead();
-        break;
       case 2:
         shutterStatus(roomLight);
         triggerEndRead();
