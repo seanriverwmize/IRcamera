@@ -1,4 +1,3 @@
-
 //Include Libraries:
 //Arduino SAMD Boards; Adafruit SAMD Board; Adafruit AMG88xx; TemperatureZero
 #include <Wire.h>
@@ -7,16 +6,20 @@
 #include <TemperatureZero.h>
 
 int command; // Commands are read throught the Serial port as integers
+
 Adafruit_AMG88xx amg;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
+
 bool status;
+const int imageGroupCount = 15;
+float imagesArray[imageGroupCount*AMG88xx_PIXEL_ARRAY_SIZE];
 const int roomLight = 400;  // minimum analog reading from photocell when exposed to room light
 const int totalSteps = 200; // Total number of steps per rotation of shutter motor
 TemperatureZero TempZero = TemperatureZero();
 float itsyBitsyTemperature;
 
-Stepper stepper(totalSteps, 12, 11, 9, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
-//Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
+//Stepper stepper(totalSteps, 12, 11, 9, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
+Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
 
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
@@ -30,6 +33,20 @@ void setup(void) {
   //pinMode(A0, INPUT);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
+}
+
+void captureImageGroup(){
+  for(int i=1; i<= imageGroupCount; i++){  
+    amg.begin();
+    delay(120);
+    amg.readPixels(pixels);
+    for(int j=1; i<=AMG88xx_PIXEL_ARRAY_SIZE; i++){
+//      Serial.print(pixels[i-1]);
+//      Serial.print(" ");
+        imagesArray[(64*(i-1))+(j-1)] = pixels[j-1];
+    }
+  }
+  Serial.print(imageGroupCount);
 }
 
 bool shutterStatus(int minumum) { // "minimum" parameter is minumum analog reading when shutter is open
@@ -50,14 +67,16 @@ bool shutterStatus(int minumum) { // "minimum" parameter is minumum analog readi
   }
 }
 
-void shutterOpen(int motorSteps){   // parameter = number of 1/200 rotations motor will make if shutter is closed. param should be replaced with concrete value after testing
-  if (shutterStatus(roomLight) == false)   // If shutter is closed, rotate motor. Otherwise, end function.
-    stepper.step(motorSteps);   // Squiggly brackets not needed with only one statement.
+void shutterOpen(){   // parameter = number of 1/200 rotations motor will make if shutter is closed. param should be replaced with concrete value after testing
+  if (shutterStatus(roomLight) == false){// If shutter is closed, rotate motor. Otherwise, end function.
+    stepper.step(170);   // rotate to shutter opening + a little extra for maximum FOV and internal light level
+  }
+    
 }
 
 void shutterClose(){
   while (shutterStatus(roomLight) == true){
-    stepper.step(1);
+    stepper.step(1); // move 1.8 degrees until photocell detects no light
   }
 }
 
@@ -99,12 +118,16 @@ void loop(){
   if(Serial.available() > 0){
     command = Serial.parseInt();
     switch(command){
+      case 1:
+        shutterOpen();
+        captureImageGroup(); //send a string that represents 15 images to Serial for Python
+        triggerEndRead();
       case 2:
         shutterStatus(roomLight);
         triggerEndRead();
         break;
       case 3:
-        shutterOpen(30); // arbitrary argument. Replace after testing.!!!!!!!!!!!
+        shutterOpen(); // arbitrary argument. Replace after testing.!!!!!!!!!!!
         triggerEndRead();
         break;
       case 4:
