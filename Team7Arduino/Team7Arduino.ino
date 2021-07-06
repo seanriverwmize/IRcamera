@@ -17,7 +17,7 @@ const int totalSteps = 200; // Total number of steps per rotation of shutter mot
 TemperatureZero TempZero = TemperatureZero();
 float itsyBitsyTemperature;
 
-//Stepper stepper(totalSteps, 12, 11, 9, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
+//Stepper stepper(totalSteps, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
 Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
 
 void setup(void) {
