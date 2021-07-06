@@ -45,7 +45,6 @@ void captureImageGroup(){
         Serial.print(" ");
     }
   }
-  //Serial.print(imagesArray);
 }
 
 bool shutterStatus() { // "minimum" parameter is minumum analog reading when shutter is open
@@ -87,16 +86,6 @@ void captureImage(){
     Serial.print(pixels[i-1]);
     Serial.print(" ");
   }
-//    Serial.print(pixels[i-1]);
-//    if(i == AMG88xx_PIXEL_ARRAY_SIZE){
-//      Serial.print("]");
-//    } else if( i%8 == 0 ){
-//      Serial.println("],");
-//      Serial.print("[");
-//    } else Serial.print(", ");
-//    }
-//Serial.println("]");
-//Serial.println();
 }
 
 void showInternalTemp(){
