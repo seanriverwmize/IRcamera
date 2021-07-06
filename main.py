@@ -2,7 +2,7 @@ import serial
 import numpy
 import matplotlib.pyplot as plt
 
-port = serial.Serial(port = "COM7", baudrate = 9600, timeout = 4) #connect to Arduino Port
+port = serial.Serial(port = "COM5", baudrate = 9600, timeout = 10) #connect to Arduino Port
 arduino_serial_data = port.readline().decode('utf-8') # Read and Translate Serial data 
 print(arduino_serial_data)
 
@@ -12,7 +12,7 @@ groupTempAverage = 0.0
 
 def make_heatmap():
     heat_array = arduino_message.split(" ")
-    for i in range(len(heat_array)):
+    for i in range(64):
       heat_array[i] = float(heat_array[i])
     heat_array = numpy.reshape(heat_array, (8, 8))
     print(heat_array)    
@@ -32,7 +32,24 @@ while True:
     arduino_message = port.read_until(expected="&".encode('utf-8')).decode('utf-8')
     arduino_message = arduino_message[:-1]
     if x == b'1':
-      print(arduino_message)  
+      arduino_message = arduino_message[:-1]
+      heat_array_group = arduino_message.split(" ")
+      for i in range(len(heat_array_group)):
+        heat_array_group[i] = float(heat_array_group[i])
+      heat_array_group = numpy.reshape(heat_array_group, (15, 8, 8))
+      group_temp_average = 0.0
+      for i in range(15):
+        group_temp_average += heat_array_group[i].max()
+        print(heat_array_group[i])
+      group_temp_average /= 15
+      print(group_temp_average)
+      sort_list = list(range(0, 15))
+      for i in range(15):
+        sort_list[i] = abs(heat_array_group[i].max() - group_temp_average)
+      print(sort_list)
+      list.sort(sort_list)
+      print(sort_list)
+      #for i in range(15):
     elif x == b'5':
       arduino_message = arduino_message[:-1]
       heat_array = make_heatmap()
@@ -40,4 +57,3 @@ while True:
       plt.savefig(fname="C:/Users/smize1/Documents/Heatmap.png", format="png") 
     else:
       print(arduino_message)
-      print("maximus")
