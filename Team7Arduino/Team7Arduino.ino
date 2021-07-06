@@ -9,11 +9,10 @@ int command; // Commands are read throught the Serial port as integers
 
 Adafruit_AMG88xx amg;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
-
+const int minimum = 200; //Minimum Analog reading to read "Shutter is Open"
 bool status;
 const int imageGroupCount = 15;
 float imagesArray[imageGroupCount*AMG88xx_PIXEL_ARRAY_SIZE];
-const int roomLight = 400;  // minimum analog reading from photocell when exposed to room light
 const int totalSteps = 200; // Total number of steps per rotation of shutter motor
 TemperatureZero TempZero = TemperatureZero();
 float itsyBitsyTemperature;
@@ -40,42 +39,42 @@ void captureImageGroup(){
     amg.begin();
     delay(120);
     amg.readPixels(pixels);
-    for(int j=1; i<=AMG88xx_PIXEL_ARRAY_SIZE; i++){
-//      Serial.print(pixels[i-1]);
-//      Serial.print(" ");
+    for(int j=1; j<=AMG88xx_PIXEL_ARRAY_SIZE; j++){
         imagesArray[(64*(i-1))+(j-1)] = pixels[j-1];
+        Serial.print(pixels[j-1]);
+        Serial.print(" ");
     }
   }
-  Serial.print(imageGroupCount);
+  //Serial.print(imagesArray);
 }
 
-bool shutterStatus(int minumum) { // "minimum" parameter is minumum analog reading when shutter is open
+bool shutterStatus() { // "minimum" parameter is minumum analog reading when shutter is open
   // int photocellPin = A0;              // TEAM 7 photocell
   int photocellPin = 1;            // FLATSAT photocell
   int photocellAnalogReading;     // the analog reading from the voltage divider
             
   photocellAnalogReading = analogRead(photocellPin); //analogRead converts Voltage value to an integer 0 - 1023 
-  Serial.print("Photocell Reading: ");  
-  Serial.print(photocellAnalogReading);  // the raw analog reading prints to Serial
-  Serial.println("/1023");  
-  if (photocellAnalogReading >= minumum){
-  Serial.println("Shutter is Open");
+  //Serial.print("Photocell Reading: ");  
+  //Serial.print(photocellAnalogReading);  // the raw analog reading prints to Serial
+  //Serial.println("/1023");  
+  if (photocellAnalogReading >= minimum){
+  //Serial.println("Shutter is Open");
   return true;
   } else {
-  Serial.println("Shutter is Closed");
+  //Serial.println("Shutter is Closed");
   return false;
   }
 }
 
 void shutterOpen(){   // parameter = number of 1/200 rotations motor will make if shutter is closed. param should be replaced with concrete value after testing
-  if (shutterStatus(roomLight) == false){// If shutter is closed, rotate motor. Otherwise, end function.
+  if (shutterStatus() == false){// If shutter is closed, rotate motor. Otherwise, end function.
     stepper.step(170);   // rotate to shutter opening + a little extra for maximum FOV and internal light level
   }
     
 }
 
 void shutterClose(){
-  while (shutterStatus(roomLight) == true){
+  while (shutterStatus() == true){
     stepper.step(1); // move 1.8 degrees until photocell detects no light
   }
 }
@@ -123,7 +122,7 @@ void loop(){
         captureImageGroup(); //send a string that represents 15 images to Serial for Python
         triggerEndRead();
       case 2:
-        shutterStatus(roomLight);
+        shutterStatus();
         triggerEndRead();
         break;
       case 3:
