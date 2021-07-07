@@ -11,7 +11,7 @@ Adafruit_AMG88xx amg;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 const int minimum = 200; //Minimum Analog reading to read "Shutter is Open"
 bool status;
-const int imageGroupCount = 15;
+const int imageGroupCount = 45;
 float imagesArray[imageGroupCount*AMG88xx_PIXEL_ARRAY_SIZE];
 const int totalSteps = 200; // Total number of steps per rotation of shutter motor
 TemperatureZero TempZero = TemperatureZero();
