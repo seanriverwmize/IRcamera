@@ -102,13 +102,16 @@ void triggerEndRead(){
   Serial.print("&");
 }
 
-void loop(){  
+void loop(){
   if(Serial.available() > 0){
     command = Serial.parseInt();
+    if(TempZero.readInternalTemperature() >= 70.0 || amg.readThermistor() >= 70.0){
+      Serial.println("Internal Temperature is Reaching Dangerous Levels");
+    }
     switch(command){
       case 1:
         shutterOpen();
-        captureImageGroup(); //send a string that represents 15 images to Serial for Python
+        captureImageGroup(); //send a string that represents 45 images to Serial for Python
         triggerEndRead();
       case 2:
         shutterStatus();
