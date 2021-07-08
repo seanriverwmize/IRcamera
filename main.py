@@ -13,8 +13,7 @@ imageGroupCount = 45
 newTempTag = 1
 groupTempAverage = 0.0
 
-def make_heatmap(array):
-    heat_array = array
+def make_heatmap(heat_array):
     heat_array = numpy.reshape(heat_array, (8, 8))
     #print(heat_array)    
     fig, ax = plt.subplots()
