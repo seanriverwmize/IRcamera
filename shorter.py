@@ -16,14 +16,13 @@ groupTempAverage = 0.0
 def make_heatmap(heat_array):
     heat_array = numpy.reshape(heat_array, (8, 8))
     #print(heat_array)    
-    fig, ax = plt.subplots()
-    im = ax.imshow(heat_array)
-    cbar = ax.figure.colorbar(im, ax=ax)
+    fig = plt.subplots()
+    cbar = fig.figure.colorbar(fig.imshow(heat_array), fig=fig)
     cbar.ax.set_ylabel("Degrees Celcius", rotation=-90, va="bottom")
     for i in range(8):
       for j in range(8):
         text = ax.text(j, i, heat_array[i, j], ha="center", va="center", color="w")
-    ax.set_title("Thermal Image")
+    fig.set_title("Thermal Image")
     fig.tight_layout()
     return heat_array
 #def make_folder(folder_path):
@@ -68,11 +67,7 @@ while True:
         make_heatmap(i)
         plt.savefig(fname= group_folder + "/map" + str(i+1) + "(" + str(i.max()) + ").png", format="png")
     elif x == b'5':
-      arduino_message = arduino_message[:-1]
-      heat_array_single = arduino_message.split(" ")
-      for i in range(64):
-        heat_array_single[i] = float(heat_array_single[i])
-      heat_array = make_heatmap(heat_array_single)
+      heat_array = make_heatmap([float(i) for i in arduino_message[:-1].split(" ")])
       #print(heat_array.max())
       plt.savefig(fname="C:/Users/smize1/Documents/Heatmap(" + str(heat_array.max()) + ").png", format="png") 
     else:
