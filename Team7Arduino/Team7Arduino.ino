@@ -30,6 +30,7 @@ void setup(void) {
   }
   pinMode(5, OUTPUT);
   //pinMode(A0, INPUT);
+  digitalWrite(5, HIGH);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
 }
@@ -65,7 +66,7 @@ bool shutterStatus() { // "minimum" parameter is minumum analog reading when shu
   }
 }
 
-void shutterOpen(){   // parameter = number of 1/200 rotations motor will make if shutter is closed. param should be replaced with concrete value after testing
+void shutterOpen(){   //
   if (shutterStatus() == false){// If shutter is closed, rotate motor. Otherwise, end function.
     stepper.step(161);   // rotate to shutter opening + a little extra for maximum FOV and internal light level - 290 degrees
   }
@@ -118,7 +119,7 @@ void loop(){
         triggerEndRead();
         break;
       case 3:
-        shutterOpen(); // arbitrary argument. Replace after testing.!!!!!!!!!!!
+        shutterOpen(); 
         triggerEndRead();
         break;
       case 4:
