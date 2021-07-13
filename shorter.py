@@ -16,13 +16,14 @@ groupTempAverage = 0.0
 def make_heatmap(heat_array):
     heat_array = numpy.reshape(heat_array, (8, 8))
     #print(heat_array)    
-    fig = plt.subplots()
-    cbar = fig.figure.colorbar(fig.imshow(heat_array), fig=fig)
+    fig, ax = plt.subplots()
+    im = ax.imshow(heat_array)
+    cbar = ax.figure.colorbar(im, ax=ax)
     cbar.ax.set_ylabel("Degrees Celcius", rotation=-90, va="bottom")
     for i in range(8):
       for j in range(8):
         text = ax.text(j, i, heat_array[i, j], ha="center", va="center", color="w")
-    fig.set_title("Thermal Image")
+    ax.set_title("Thermal Image")
     fig.tight_layout()
     return heat_array
 def find_max_difference(x):
