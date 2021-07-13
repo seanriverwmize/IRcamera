@@ -25,8 +25,6 @@ def make_heatmap(heat_array):
     fig.set_title("Thermal Image")
     fig.tight_layout()
     return heat_array
-#def make_folder(folder_path):
-  #mkdir(folder_path)
 def find_max_difference(x):
     return abs(x.max() - group_temp_average)
 
@@ -39,36 +37,23 @@ while True:
     arduino_message = arduino_message[:-1]
     if x == b'1':
       current_time = time.strftime("%H-%M-%S", time.localtime())
-      #arduino_message = arduino_message[:-1]
-      #heat_array_group = arduino_message.split(" ")
-      #for i in range(len(heat_array_group)):
-       #heat_array_group[i] = float(heat_array_group[i])
-      #heat_array_group = numpy.reshape(heat_array_group, (imageGroupCount, 64))
       heat_array_group = numpy.reshape([float(i) for i in arduino_message[:-1].split(" ")], (imageGroupCount, 64)) 
       
       group_temp_average = 0.0
-      
-      #for i in range(imageGroupCount):
-      #  group_temp_average += heat_array_group[i].max()
-        #print(heat_array_group[i])
+     
       for i in heat_array_group:
         group_temp_average += i.max()
       
       group_temp_average /= imageGroupCount
       heat_array_group = sorted(heat_array_group, key=find_max_difference)[:15]
-      group_folder = "C:/Users/smize1/Documents/({}) {:.2f}".format(current_time, group_temp_average)# + current_time + ") " + str(group_temp_average)
+      group_folder = "C:/Users/smize1/Documents/({}) {:.2f}".format(current_time, group_temp_average)
       mkdir(group_folder)
-      #print(group_temp_average)
-      
-      #heat_array_group = heat_array_group[:15]
-      #for i in range(len(heat_array_group)):
-        #print(heat_array_group[i].max())
+   
       for i in heat_array_group):
         make_heatmap(i)
         plt.savefig(fname= group_folder + "/map" + str(i+1) + "(" + str(i.max()) + ").png", format="png")
     elif x == b'5':
       heat_array = make_heatmap([float(i) for i in arduino_message[:-1].split(" ")])
-      #print(heat_array.max())
       plt.savefig(fname="C:/Users/smize1/Documents/Heatmap(" + str(heat_array.max()) + ").png", format="png") 
     else:
       print(arduino_message)
