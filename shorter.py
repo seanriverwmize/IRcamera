@@ -49,7 +49,7 @@ while True:
       group_folder = "C:/Users/smize1/Documents/({}) {:.2f}".format(current_time, group_temp_average)
       mkdir(group_folder)
    
-      for i in heat_array_group):
+      for i in heat_array_group:
         make_heatmap(i)
         plt.savefig(fname= group_folder + "/map" + str(i+1) + "(" + str(i.max()) + ").png", format="png")
     elif x == b'5':
