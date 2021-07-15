@@ -84,7 +84,7 @@ void shutterClose(){
     stepper.enableOutputs();
     delay(100);
     while (shutterStatus() == true){
-      stepper.step(1); // move 1.8 degrees until photocell detects no light
+      stepper.move(1); // move 1.8 degrees until photocell detects no light
     }
     stepper.disableOutputs();
     delay(100);
