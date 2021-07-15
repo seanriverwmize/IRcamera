@@ -17,7 +17,7 @@ const int totalSteps = 200; // Total number of steps per rotation of shutter mot
 TemperatureZero TempZero = TemperatureZero();
 float itsyBitsyTemperature;
 
-AccelStepper stepper(AccelStepper::FULL4WIRE,12,11,10,7)
+AccelStepper stepper(AccelStepper::FULL4WIRE,12,11,10,7);
 
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
