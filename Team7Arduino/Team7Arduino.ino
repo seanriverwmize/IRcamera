@@ -37,10 +37,10 @@ void setup(void) {
 
 void shutDownStepper(){
   digitalWrite(5, LOW);
-  digitalWrite(7, LOW);
-  digitalWrite(12, LOW);
-  digitalWrite(10, LOW);
-  digitalWrite(11, LOW);
+//   digitalWrite(7, LOW);
+//   digitalWrite(12, LOW);
+//   digitalWrite(10, LOW);
+//   digitalWrite(11, LOW);
 }
 
 void captureImageGroup(){
@@ -76,7 +76,7 @@ bool shutterStatus() { // "minimum" parameter is minumum analog reading when shu
 
 void shutterOpen(){   //
   if (shutterStatus() == false){// If shutter is closed, rotate motor. Otherwise, end function.
-    Stepper stepper(totalSteps, 12, 11, 10, 7);
+    digitalWrite(5, HIGH);
     stepper.step(147);   // rotate to shutter opening + a little extra for maximum FOV and internal light level - 290 degrees
   }
   shutDownStepper();
@@ -125,9 +125,6 @@ void triggerEndRead(){
 void loop(){
   if(Serial.available() > 0){
     command = Serial.parseInt();
-    if(TempZero.readInternalTemperature() >= 70.0 || amg.readThermistor() >= 70.0){
-      Serial.println("Internal Temperature is Reaching Dangerous Levels");
-    }
     switch(command){
       case 1:
         shutterOpen();
