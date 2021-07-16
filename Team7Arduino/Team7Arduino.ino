@@ -17,8 +17,8 @@ const int totalSteps = 200; // Total number of steps per rotation of shutter mot
 TemperatureZero TempZero = TemperatureZero();
 float itsyBitsyTemperature;
 
-//Stepper stepper(totalSteps, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
-Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
+Stepper stepper(totalSteps, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
+//Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
 
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
@@ -29,10 +29,18 @@ void setup(void) {
       while (1);
   }
   pinMode(5, OUTPUT);
-  //pinMode(A0, INPUT);
+  pinMode(A0, INPUT);
   digitalWrite(5, HIGH);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
+}
+
+void shutDownStepper(){
+  digitalWrite(5, LOW);
+  digitalWrite(7, LOW);
+  digitalWrite(12, LOW);
+  digitalWrite(10, LOW);
+  digitalWrite(11, LOW);
 }
 
 void captureImageGroup(){
@@ -68,8 +76,10 @@ bool shutterStatus() { // "minimum" parameter is minumum analog reading when shu
 
 void shutterOpen(){   //
   if (shutterStatus() == false){// If shutter is closed, rotate motor. Otherwise, end function.
+    Stepper stepper(totalSteps, 12, 11, 10, 7);
     stepper.step(147);   // rotate to shutter opening + a little extra for maximum FOV and internal light level - 290 degrees
-  }   
+  }
+  shutDownStepper();
 }
 
 // void shutterOpen(){ 
