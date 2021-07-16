@@ -133,7 +133,6 @@ void loop(){
         triggerEndRead();
       case 2:
         shutterStatus();
-        triggerEndRead();
         break;
       case 3:
         shutterOpen(); 
