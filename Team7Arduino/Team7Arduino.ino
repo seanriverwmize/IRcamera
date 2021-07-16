@@ -120,6 +120,7 @@ void loop(){
       case 1:
         shutterOpen();
         captureImageGroup(); //send a string that represents 45 images to Serial for Python
+        shutterClose();
         triggerEndRead();
       case 2:
         shutterStatus();
