@@ -2,7 +2,7 @@
 //Arduino SAMD Boards; Adafruit SAMD Board; Adafruit AMG88xx; TemperatureZero
 #include <Wire.h>
 #include <Adafruit_AMG88xx.h>
-#include <Stepper.h>
+#include <AccelStepper.h>
 #include <TemperatureZero.h>
 
 int command; // Commands are read throught the Serial port as integers
@@ -10,19 +10,23 @@ int command; // Commands are read throught the Serial port as integers
 Adafruit_AMG88xx amg;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 const int minimum = 200; //Minimum Analog reading to read "Shutter is Open"
-bool status;
 const int imageGroupCount = 45;
 float imagesArray[imageGroupCount*AMG88xx_PIXEL_ARRAY_SIZE];
 const int totalSteps = 200; // Total number of steps per rotation of shutter motor
 TemperatureZero TempZero = TemperatureZero();
 float itsyBitsyTemperature;
+bool status;
 
-Stepper stepper(totalSteps, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
-//Stepper stepper(totalSteps, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
+//AccelStepper stepper(AccelStepper::FULL4WIRE, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
+AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
 
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
   Serial.begin(9600);
+  stepper.setMaxSpeed(400);  
+  stepper.setAcceleration(5);
+  stepper.setSpeed(200);
+  stepper.setCurrentPosition(0);
   status = amg.begin();
   if (!status) {
       Serial.println("Could not find a valid AMG88xx sensor, check wiring!");
@@ -33,14 +37,6 @@ void setup(void) {
   digitalWrite(5, HIGH);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
-}
-
-void shutDownStepper(){
-  digitalWrite(5, LOW);
-//   digitalWrite(7, LOW);
-//   digitalWrite(12, LOW);
-//   digitalWrite(10, LOW);
-//   digitalWrite(11, LOW);
 }
 
 void captureImageGroup(){
@@ -76,10 +72,13 @@ bool shutterStatus() { // "minimum" parameter is minumum analog reading when shu
 
 void shutterOpen(){   //
   if (shutterStatus() == false){// If shutter is closed, rotate motor. Otherwise, end function.
-    digitalWrite(5, HIGH);
-    stepper.step(147);   // rotate to shutter opening + a little extra for maximum FOV and internal light level - 290 degrees
+    stepper.enableOutputs();
+    stepper.move(147);   // rotate to shutter opening + a little extra for maximum FOV and internal light level
+    while(stepper.distanceToGo() != 0){
+      stepper.run();
+    }
+    stepper.disableOutputs();
   }
-  shutDownStepper();
 }
 
 // void shutterOpen(){ 
@@ -91,10 +90,15 @@ void shutterOpen(){   //
 
 void shutterClose(){
   if (shutterStatus() == true){
+    stepper.enableOutputs();
     while (shutterStatus() == true){
-      stepper.step(1); // move 1.8 degrees until photocell detects no light
+      stepper.move(1); // move 1.8 degrees until photocell detects no light
+      while(stepper.distanceToGo() != 0){
+        stepper.run();
+      }
     }
-  stepper.step(14);
+  stepper.move(14);
+  stepper.disableOutputs();
   }
 }
 
@@ -134,6 +138,7 @@ void loop(){
         break;
       case 2:
         shutterStatus();
+        triggerEndRead();
         break;
       case 3:
         shutterOpen(); 
