@@ -23,9 +23,9 @@ AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 9, 10, 11); //FLATSAT PINS orde
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
   Serial.begin(9600);
-  stepper.setMaxSpeed(400);  
-  stepper.setAcceleration(5);
-  stepper.setSpeed(200);
+  stepper.setMaxSpeed(1000);  
+  stepper.setAcceleration(0);
+  stepper.setSpeed(1000);
   stepper.setCurrentPosition(0);
   status = amg.begin();
   if (!status) {
@@ -37,6 +37,8 @@ void setup(void) {
   digitalWrite(5, HIGH);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
+  
+  
 }
 
 void captureImageGroup(){
@@ -98,6 +100,9 @@ void shutterClose(){
       }
     }
   stepper.move(14);
+  while(stepper.distanceToGo() != 0){
+    stepper.run();
+  }
   stepper.disableOutputs();
   }
 }
