@@ -89,7 +89,7 @@ bool shutterStatus() { // "minimum" parameter is minumum analog reading when shu
 void shutterOpen(){   //
   if (shutterStatus() == false){// If shutter is closed, rotate motor. Otherwise, end function.
     stepper.enableOutputs();
-    stepper.move(147);   // rotate to shutter opening + a little extra for maximum FOV and internal light level
+    stepper.move(152);   // rotate to shutter opening + a little extra for maximum FOV and internal light level
     while(stepper.distanceToGo() != 0){
       stepper.run();
     }
