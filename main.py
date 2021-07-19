@@ -56,7 +56,7 @@ while True:
       #heat_array_group = heat_array_group[:15]
       #for i in range(len(heat_array_group)):
         #print(heat_array_group[i].max())
-      for i in heat_array_group:
+      for i in range(len(heat_array_group)):
         make_heatmap(heat_array_group[i])
         plt.savefig(fname= group_folder + "/map" + str(i+1) + "(" + str(heat_array_group[i].max()) + ").png", format="png")
     elif x == b'5':
