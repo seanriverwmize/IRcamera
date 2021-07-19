@@ -9,10 +9,9 @@ int command; // Commands are read throught the Serial port as integers
 
 Adafruit_AMG88xx amg;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
-const int minimum = 200; //Minimum Analog reading to read "Shutter is Open"
+const int minimum = 600; //Minimum Analog reading to read "Shutter is Open"
 const int imageGroupCount = 45;
 float imagesArray[imageGroupCount*AMG88xx_PIXEL_ARRAY_SIZE];
-const int totalSteps = 200; // Total number of steps per rotation of shutter motor
 TemperatureZero TempZero = TemperatureZero();
 float itsyBitsyTemperature;
 bool status;
@@ -38,6 +37,21 @@ void setup(void) {
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
   
+  if (shutterStatus() == false){
+    stepper.enableOutputs();
+    while (shutterStatus() == false){
+      stepper.move(1); // move 1.8 degrees until photocell detects light
+      while(stepper.distanceToGo() != 0){
+        stepper.run();
+      }
+    }
+  stepper.move(14);
+  while(stepper.distanceToGo() != 0){
+    stepper.run();
+  }
+  stepper.disableOutputs();
+  }
+  shutterClose();
   
 }
 
