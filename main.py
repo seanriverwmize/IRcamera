@@ -26,8 +26,6 @@ def make_heatmap(heat_array):
     ax.set_title("Thermal Image")
     fig.tight_layout()
     return heat_array
-def make_folder(folder_path):
-  mkdir(folder_path)
 def find_max_difference(x):
     return abs(x.max() - group_temp_average)
 
@@ -42,8 +40,9 @@ while True:
       current_time = time.strftime("%H-%M-%S", time.localtime())
       arduino_message = arduino_message[:-1]
       heat_array_group = arduino_message.split(" ")
-      for i in range(len(heat_array_group)):
-        heat_array_group[i] = float(heat_array_group[i])
+#       for i in range(len(heat_array_group)):
+#         heat_array_group[i] = float(heat_array_group[i])
+      heat_array_group = [float(i) for i in heat_array_group] #list constructor version
       heat_array_group = numpy.reshape(heat_array_group, (imageGroupCount, 64))
       group_temp_average = 0.0
       for i in range(imageGroupCount):
@@ -51,7 +50,7 @@ while True:
         #print(heat_array_group[i])
       group_temp_average /= imageGroupCount
       group_folder = "C:/Users/smize1/Documents/({}) {:.2f}".format(current_time, group_temp_average)# + current_time + ") " + str(group_temp_average)
-      make_folder(group_folder)
+      mkdir(group_folder)
       #print(group_temp_average)
       heat_array_group = sorted(heat_array_group, key=find_max_difference)
       heat_array_group = heat_array_group[:15]
