@@ -17,8 +17,8 @@ float itsyBitsyTemperature;
 float amgTemp;
 bool status;
 
-//AccelStepper stepper(AccelStepper::FULL4WIRE, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
-AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
+AccelStepper stepper(AccelStepper::FULL4WIRE, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
+//AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
 
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
@@ -70,13 +70,13 @@ void captureImageGroup(){
 }
 
 bool shutterStatus() { // "minimum" parameter is minumum analog reading when shutter is open
-  // int photocellPin = A0;              // TEAM 7 photocell
-  int photocellPin = 1;            // FLATSAT photocell
+  int photocellPin = A0;              // TEAM 7 photocell
+  //int photocellPin = 1;            // FLATSAT photocell
   int photocellAnalogReading;     // the analog reading from the voltage divider
             
   photocellAnalogReading = analogRead(photocellPin); //analogRead converts Voltage value to an integer 0 - 1023 
-  //Serial.print("Photocell Reading: ");  
-  //Serial.print(photocellAnalogReading);  // the raw analog reading prints to Serial
+  Serial.print("Photocell Reading: ");  
+  Serial.print(photocellAnalogReading);  // the raw analog reading prints to Serial
   //Serial.println("/1023");  
   if (photocellAnalogReading >= minimum){
   //Serial.println("Shutter is Open");
