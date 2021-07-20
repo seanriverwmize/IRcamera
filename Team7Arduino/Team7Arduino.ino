@@ -14,6 +14,7 @@ const int imageGroupCount = 45;
 float imagesArray[imageGroupCount*AMG88xx_PIXEL_ARRAY_SIZE];
 TemperatureZero TempZero = TemperatureZero();
 float itsyBitsyTemperature;
+float amgTemp;
 bool status;
 
 //AccelStepper stepper(AccelStepper::FULL4WIRE, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
@@ -133,12 +134,19 @@ void captureImage(){
 
 void showInternalTemp(){
   itsyBitsyTemperature = TempZero.readInternalTemperature();
+  amgTemp = amg.readThermistor();
   Serial.print("Itsy Bitsy M4 Internal Temp: ");
   Serial.print(itsyBitsyTemperature);
   Serial.println(" degrees C");
   Serial.print("AMG8833 Internal Temp: ");
-  Serial.print(amg.readThermistor());
+  Serial.print(amgTemp);
   Serial.println(" degrees C");
+  if (itsyBitsyTemperature >= 60.0){
+    Serial.println("WARNING: Itsy Bitsy M4 Internal Temperature is reaching dangerous levels!");
+  }
+  if (amgTemp >= 60.0){
+    Serial.println("WARNING: AMG8833 Thermal Camera Internal Temperature is reaching dangerous levels!");
+  }  
 }
 
 void triggerEndRead(){
