@@ -23,9 +23,9 @@ AccelStepper stepper(AccelStepper::FULL4WIRE, 12, 11, 10, 7); // Team 7 Pins use
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
   Serial.begin(9600);
-  stepper.setMaxSpeed(1000);  
-  stepper.setAcceleration(0);
-  stepper.setSpeed(1000);
+  stepper.setMaxSpeed(1500);  
+  stepper.setAcceleration(100);
+  stepper.setSpeed(500);
   stepper.setCurrentPosition(0);
   status = amg.begin();
   if (!status) {
