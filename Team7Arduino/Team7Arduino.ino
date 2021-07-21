@@ -9,7 +9,7 @@ int command; // Commands are read throught the Serial port as integers
 
 Adafruit_AMG88xx amg;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
-const int minimum = 600; //Minimum Analog reading to read "Shutter is Open"
+const int minimum = 70; //Minimum Analog reading to read "Shutter is Open"
 const int imageGroupCount = 45;
 float imagesArray[imageGroupCount*AMG88xx_PIXEL_ARRAY_SIZE];
 TemperatureZero TempZero = TemperatureZero();
