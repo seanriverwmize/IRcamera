@@ -64,7 +64,7 @@ while True:
 #       heat_array_single = arduino_message.split(" ")[:-1]
 #       for i in range(64):
 #         heat_array_single[i] = float(heat_array_single[i])
-      heat_array_single = [float(i) for i in arduino_message.split(" ")[:-1]]
+      heat_array_single = [float(i) for i in arduino_message.split(" ")]
       heat_array = make_heatmap(heat_array_single)
       #print(heat_array.max())
       plt.savefig(fname="C:/Users/smize1/Documents/Heatmap(" + str(heat_array.max()) + ").png", format="png") 
