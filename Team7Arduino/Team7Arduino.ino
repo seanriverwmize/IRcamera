@@ -18,7 +18,6 @@ float amgTemp;
 bool status;
 
 AccelStepper stepper(AccelStepper::FULL4WIRE, 12, 11, 10, 7); // Team 7 Pins used in order: AIN1, AIN2, BIN2, BIN1
-//AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 9, 10, 11); //FLATSAT PINS order: AIN1, AIN2, BIN2, BIN1
 
 void setup(void) {
   // Setup function needs to run once when instrument is plugged in
