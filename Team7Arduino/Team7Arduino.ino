@@ -32,7 +32,6 @@ void setup(void) {
       Serial.println("Could not find a valid AMG88xx sensor, check wiring!");
       while (1);
   }
-  pinMode(5, OUTPUT);
   pinMode(A0, INPUT);
   digitalWrite(5, HIGH);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
