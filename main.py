@@ -14,8 +14,7 @@ newTempTag = 1
 groupTempAverage = 0.0
 
 def make_heatmap(heat_array):
-    heat_array = numpy.reshape(heat_array, (8, 8))
-    #print(heat_array)    
+    heat_array = numpy.reshape(heat_array, (8, 8))  
     fig, ax = plt.subplots()
     im = ax.imshow(heat_array)
     cbar = ax.figure.colorbar(im, ax=ax)
