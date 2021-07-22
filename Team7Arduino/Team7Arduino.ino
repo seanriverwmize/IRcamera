@@ -72,8 +72,8 @@ bool shutterStatus() { // "minimum" parameter is minumum analog reading when shu
   int photocellAnalogReading;     // the analog reading from the voltage divider
             
   photocellAnalogReading = analogRead(photocellPin); //analogRead converts Voltage value to an integer 0 - 1023 
-  Serial.print("Photocell Reading: ");  
-  Serial.print(photocellAnalogReading);  // the raw analog reading prints to Serial
+  //Serial.print("Photocell Reading: ");  
+  //Serial.print(photocellAnalogReading);  // the raw analog reading prints to Serial
   //Serial.println("/1023");  
   if (photocellAnalogReading >= minimum){
   //Serial.println("Shutter is Open");
