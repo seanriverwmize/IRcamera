@@ -32,7 +32,6 @@ void setup(void) {
       while (1);
   }
   pinMode(A0, INPUT);
-  digitalWrite(5, HIGH);
   stepper.setSpeed(60); // set the speed of the motor to 30 RPMs
   TempZero.init();
   
