@@ -43,7 +43,7 @@ while True:
       for i in range(imageGroupCount):
         group_temp_average += heat_array_group[i].max()
       group_temp_average /= imageGroupCount
-      group_folder = "C:/Users/smize1/Documents/({}) {:.2f}".format(current_time, group_temp_average)# + current_time + ") " + str(group_temp_average)
+      group_folder = "C:/Users/smize1/Documents/({}) {:.2f}".format(current_time, group_temp_average)
       mkdir(group_folder)
       heat_array_group = sorted(heat_array_group, key=find_max_difference)[:15]
       for i in range(len(heat_array_group)):
