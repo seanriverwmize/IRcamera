@@ -31,7 +31,6 @@ def find_max_difference(x):
 while True:
     x = input("What would you like to send: ").encode()
     port.open()
-    #time.sleep(2)
     port.write(x)
     arduino_message = port.read_until(expected="&".encode('utf-8')).decode('utf-8')
     port.close()
